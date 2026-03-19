@@ -46,7 +46,7 @@ def plot_variables(dataframe, columns, save=False):
     colors = ['C9', 'C8', 'C7', 'C6', 'C5', 'C4', 'C3', 'C2', 'C1', 'C0', 'm', 'y', 'C9', 'C8', 'C7']
     
     for i, (col, label, color) in enumerate(zip(columns, labels, colors)):
-            axs[i].plot(dataframe[col], color=color, linewidth=1, label=label)
+            axs[i].scatter(dataframe.index, dataframe[col], color=color, linewidth=1, label=label)
             axs[i].set_ylabel(label, fontsize=20)
             axs[i].legend(loc='upper right', fontsize=16)
             axs[i].grid(True)
@@ -148,3 +148,15 @@ def preprocesamiento_datos(df, sag, columns_rename, time_format='%d-%m-%Y %H:%M:
 
 
     return df_copy
+
+
+def buscar_valores_no_numericos(df, columna):
+
+    mascara_no_numericos = pd.to_numeric(df[columna], errors='coerce').isna()#& df[columna].notna()
+    valores_no_numericos = df[mascara_no_numericos][columna]
+
+    print(f"Valores en '{columna}' que no pueden convertirse a número:")
+    print(f"Total encontrados: {len(valores_no_numericos)}")
+    print(valores_no_numericos.to_string())
+
+    return valores_no_numericos
